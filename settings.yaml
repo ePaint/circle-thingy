@@ -29,10 +29,10 @@ OUTPUT_SIZE_INCHES: 10.0
 OUTPUT_DPI: 300
 
 # Draws the outwards lines from the center
-DRAW_CIRCLE_LINES: false
+DRAW_CIRCLE_LINES: true
 
 # Draws the arcs between the points of each circle
-DRAW_CIRCLE_ARCS: false
+DRAW_CIRCLE_ARCS: true
 
 # Initial angles for the vectors
 VECTORS:

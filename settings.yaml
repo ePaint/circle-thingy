@@ -1,0 +1,47 @@
+# Main points color
+MAIN_COLOR: '#3d85c6'
+
+# Secondary points color
+SECONDARY_COLOR: '#674ea7'
+
+# Connecting lines between the main points
+TERTIARY_COLOR: '#434343'
+
+# Step size for the blue values
+STEP_SIZE: 3
+
+# Number of circles to draw
+NUMBER_OF_CIRCLES: 6
+
+# Distance between the circles
+LENGTH_INCREMENT_PER_CIRCLE: 1.0
+
+# Output filename (without extension, will be saved as .png)
+OUTPUT_FILE_NAME: 'output_[timestamp]'
+
+# Output size in inches (the image will be square)
+OUTPUT_SIZE_INCHES: 10.0
+
+# Output DPI (dots per inch)
+OUTPUT_DPI: 300
+
+# Draws the outwards lines from the center
+DRAW_CIRCLE_LINES: false
+
+# Draws the arcs between the points of each circle
+DRAW_CIRCLE_ARCS: true
+
+# Initial angles for the vectors
+VECTORS:
+  - angle: 0.0
+  - angle: 30.0
+  - angle: 60.0
+  - angle: 90.0
+  - angle: 120.0
+  - angle: 150.0
+  - angle: 180.0
+  - angle: 210.0
+  - angle: 240.0
+  - angle: 270.0
+  - angle: 300.0
+  - angle: 330.0

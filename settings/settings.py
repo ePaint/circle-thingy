@@ -11,6 +11,7 @@ class Settings(BaseModel):
     NUMBER_OF_CIRCLES: int = 10
     LENGTH_INCREMENT_PER_CIRCLE: float = 1.0
     VECTORS: list[Vector] = Field(default_factory=list)
+    OUTPUT_FOLDER: str = 'output'
     OUTPUT_FILE_NAME: str = 'output_[timestamp]'
     OUTPUT_SIZE_INCHES: float = 10.0
     OUTPUT_DPI: int = 300

@@ -1,4 +1,6 @@
 from datetime import datetime
+from pathlib import Path
+from tkinter.font import families
 from typing import Optional
 import matplotlib.pyplot as plt
 from settings.models import Vector
@@ -15,7 +17,7 @@ def plot_points(plotter: plt,
                 label_color: str = 'black'):
     plotter.scatter(*zip(*points), color=marker_color, marker=marker, s=10)
     for i, label in enumerate(labels):
-        plotter.text(points[i][0], points[i][1], label, ha=ha, va=va, color=label_color)
+        plotter.text(points[i][0], points[i][1], label, ha=ha, va=va, color=label_color, family='sans-serif')
 
 
 def plot_vectors(plotter: plt,
@@ -106,8 +108,10 @@ def main():
     plt.tight_layout()
 
     timestamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    filename = SETTINGS.OUTPUT_FILE_NAME.replace('[timestamp]', timestamp)
-    plt.savefig(filename + '.png', dpi=SETTINGS.OUTPUT_DPI)
+    folder = Path(SETTINGS.OUTPUT_FOLDER)
+    filename = SETTINGS.OUTPUT_FILE_NAME.replace('[timestamp]', timestamp) + '.png'
+    filepath = folder / filename
+    plt.savefig(filepath, dpi=SETTINGS.OUTPUT_DPI)
     plt.show()
 
 

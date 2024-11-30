@@ -8,13 +8,16 @@ SECONDARY_COLOR: '#674ea7'
 TERTIARY_COLOR: '#434343'
 
 # Step size for the blue values
-STEP_SIZE: 3
+STEP_SIZE: 1
 
 # Number of circles to draw
 NUMBER_OF_CIRCLES: 6
 
 # Distance between the circles
 LENGTH_INCREMENT_PER_CIRCLE: 1.0
+
+# Output folder
+OUTPUT_FOLDER: 'D:\MEDIA\DOCUMENTOS\ThatExcelGuy\TEG_Python\leon4\output'
 
 # Output filename (without extension, will be saved as .png)
 OUTPUT_FILE_NAME: 'output_[timestamp]'
@@ -29,7 +32,7 @@ OUTPUT_DPI: 300
 DRAW_CIRCLE_LINES: false
 
 # Draws the arcs between the points of each circle
-DRAW_CIRCLE_ARCS: true
+DRAW_CIRCLE_ARCS: false
 
 # Initial angles for the vectors
 VECTORS:

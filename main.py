@@ -1,6 +1,5 @@
 from datetime import datetime
 from pathlib import Path
-from tkinter.font import families
 from typing import Optional
 import matplotlib.pyplot as plt
 from settings.models import Vector

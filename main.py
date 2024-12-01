@@ -1,3 +1,4 @@
+import ast
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -8,15 +9,37 @@ from settings.settings import SETTINGS
 
 def plot_points(plotter: plt,
                 points: list[list],
-                labels: list[str],
+                fraction_labels: list[str],
+                value_labels: list[str] = None,
                 marker: Optional[str] = None,
                 marker_color: str = 'black',
-                ha: str = 'center',
-                va: str = 'bottom',
-                label_color: str = 'black'):
-    plotter.scatter(*zip(*points), color=marker_color, marker=marker, s=10)
-    for i, label in enumerate(labels):
-        plotter.text(points[i][0], points[i][1], label, ha=ha, va=va, color=label_color, family='sans-serif')
+                label_color: str = 'black',
+                font_family: str = 'sans-serif',
+                font_size: int = 10,
+                dot_size: int = 10):
+    plotter.scatter(*zip(*points), color=marker_color, marker=marker, s=dot_size)
+    for i, label in enumerate(fraction_labels):
+        plotter.text(points[i][0],
+                     points[i][1],
+                     label,
+                     ha='center',
+                     va='bottom',
+                     variant='normal',
+                     color=label_color,
+                     family=font_family,
+                     fontsize=font_size)
+    if value_labels is None:
+        return
+    for i, label in enumerate(value_labels):
+        plotter.text(points[i][0],
+                     points[i][1],
+                     label,
+                     ha='center',
+                     va='top',
+                     variant='normal',
+                     color=label_color,
+                     family=font_family,
+                     fontsize=font_size)
 
 
 def plot_vectors(plotter: plt,
@@ -27,24 +50,36 @@ def plot_vectors(plotter: plt,
             [vector.origin.x, vector.target.x],
             [vector.origin.y, vector.target.y],
             color=color,
-            linewidth=0.5
+            linewidth=0.2
         )
+
+
+def save_fig(folder: str,
+             filename: str,
+             dpi: int):
+    if SETTINGS.OUTPUT_ENABLED:
+        timestamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+        folder = Path(folder)
+        filename = filename.replace('[timestamp]', timestamp) + '.png'
+        filepath = folder / filename
+        plt.savefig(filepath, dpi=dpi)
 
 
 def main():
     VECTORS = SETTINGS.VECTORS
     layer = SETTINGS.STEP_SIZE
     base_points = [[0, 0]]
-    base_labels = [f'{layer}/{layer}']
+    base_fraction_labels = [f'{layer}/{layer}']
     middle_points = []
-    middle_labels = []
+    middle_fraction_labels = []
+    middle_value_labels = []
     circle_arcs = []
     circle_lines = []
 
     layer += SETTINGS.STEP_SIZE
     for vector_index, vector in enumerate(VECTORS):
         base_points.append([vector.target.x, vector.target.y])
-        base_labels.append(f'{layer}/{layer}')
+        base_fraction_labels.append(f'{layer}/{layer}')
         next_vector = VECTORS[(vector_index + 1) % len(VECTORS)]
         circle_arcs.append(vector - next_vector)
 
@@ -55,14 +90,16 @@ def main():
         for vector in VECTORS:
             vector.length += SETTINGS.LENGTH_INCREMENT_PER_CIRCLE
             base_points.append([vector.target.x, vector.target.y])
-            base_labels.append(f'{layer}/{layer}')
+            base_fraction_labels.append(f'{layer}/{layer}')
 
         for vector_index, vector in enumerate(VECTORS):
             next_vector = VECTORS[(vector_index + 1) % len(VECTORS)]
 
             combination_vector = next_vector - vector
             inner_layer_label_template = '[1]/[2]'
-            if vector_index % 2 == 1:
+
+            odd_step = vector_index % 2 == 1
+            if odd_step:
                 combination_vector = vector - next_vector
                 inner_layer_label_template = '[2]/[1]'
 
@@ -78,21 +115,29 @@ def main():
                 middle_points.append([combination_vector.target.x, combination_vector.target.y])
 
                 inner_layer_value += SETTINGS.STEP_SIZE
-                inner_layer_label = inner_layer_label_template.replace('[1]', str(inner_layer_value)).replace('[2]', str(inner_layer))
-                middle_labels.append(inner_layer_label)
+                inner_layer_fraction_label = inner_layer_label_template.replace('[1]', str(inner_layer_value)).replace('[2]', str(inner_layer))
+                inner_layer_value_label = inner_layer_value / inner_layer if odd_step else inner_layer / inner_layer_value
+                inner_layer_value_label = str(round(inner_layer_value_label, SETTINGS.ROUNDING_PRECISION))
+                middle_fraction_labels.append(inner_layer_fraction_label)
+                middle_value_labels.append(inner_layer_value_label)
 
     circle_lines.extend(VECTORS)
 
     plot_points(plotter=plt,
                 points=base_points,
-                labels=base_labels,
+                fraction_labels=base_fraction_labels,
                 marker_color=SETTINGS.MAIN_COLOR,
-                label_color=SETTINGS.MAIN_COLOR)
+                label_color=SETTINGS.MAIN_COLOR,
+                font_size=SETTINGS.FONT_SIZE,
+                dot_size=SETTINGS.DOT_SIZE)
     plot_points(plotter=plt,
                 points=middle_points,
-                labels=middle_labels,
+                fraction_labels=middle_fraction_labels,
+                value_labels=middle_value_labels,
                 marker_color=SETTINGS.SECONDARY_COLOR,
-                label_color=SETTINGS.SECONDARY_COLOR)
+                label_color=SETTINGS.SECONDARY_COLOR,
+                font_size=SETTINGS.FONT_SIZE,
+                dot_size=SETTINGS.DOT_SIZE)
     if SETTINGS.DRAW_CIRCLE_ARCS:
         plot_vectors(plotter=plt,
                      vectors=circle_arcs,
@@ -106,12 +151,12 @@ def main():
     plt.gcf().set_size_inches(SETTINGS.OUTPUT_SIZE_INCHES, SETTINGS.OUTPUT_SIZE_INCHES)
     plt.tight_layout()
 
-    timestamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    folder = Path(SETTINGS.OUTPUT_FOLDER)
-    filename = SETTINGS.OUTPUT_FILE_NAME.replace('[timestamp]', timestamp) + '.png'
-    filepath = folder / filename
-    plt.savefig(filepath, dpi=SETTINGS.OUTPUT_DPI)
-    plt.show()
+    save_fig(folder=SETTINGS.OUTPUT_FOLDER,
+             filename=SETTINGS.OUTPUT_FILE_NAME,
+             dpi=SETTINGS.OUTPUT_DPI)
+
+    if SETTINGS.SHOW_PLOT:
+        plt.show()
 
 
 if __name__ == '__main__':

@@ -7,14 +7,29 @@ SECONDARY_COLOR: '#674ea7'
 # Connecting lines between the main points
 TERTIARY_COLOR: '#434343'
 
+# Label font size
+FONT_SIZE: 10
+
+# Dot size
+DOT_SIZE: 2
+
+# Number of decimal places for the rounding
+ROUNDING_PRECISION: 2
+
 # Step size for the blue values
-STEP_SIZE: 1
+STEP_SIZE: 6
 
 # Number of circles to draw
-NUMBER_OF_CIRCLES: 6
+NUMBER_OF_CIRCLES: 32
 
 # Distance between the circles
-LENGTH_INCREMENT_PER_CIRCLE: 1.0
+LENGTH_INCREMENT_PER_CIRCLE: 1
+
+# Display plot on a popup window (not recommended for large plots)
+SHOW_PLOT: false
+
+# Enables or disables output file
+OUTPUT_ENABLED: true
 
 # Output folder
 OUTPUT_FOLDER: 'D:\MEDIA\DOCUMENTOS\ThatExcelGuy\TEG_Python\leon4\output'
@@ -23,13 +38,13 @@ OUTPUT_FOLDER: 'D:\MEDIA\DOCUMENTOS\ThatExcelGuy\TEG_Python\leon4\output'
 OUTPUT_FILE_NAME: 'output_[timestamp]'
 
 # Output size in inches (the image will be square)
-OUTPUT_SIZE_INCHES: 10.0
+OUTPUT_SIZE_INCHES: 75
 
 # Output DPI (dots per inch)
-OUTPUT_DPI: 300
+OUTPUT_DPI: 100
 
 # Draws the outwards lines from the center
-DRAW_CIRCLE_LINES: true
+DRAW_CIRCLE_LINES: false
 
 # Draws the arcs between the points of each circle
 DRAW_CIRCLE_ARCS: true

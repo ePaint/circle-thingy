@@ -67,30 +67,39 @@ def save_fig(folder: str,
 
 def main():
     VECTORS = SETTINGS.VECTORS
-    layer = SETTINGS.STEP_SIZE
+    layer = SETTINGS.BASE_SEED_DENOMINATOR
     base_points = [[0, 0]]
-    base_fraction_labels = [f'{layer}/{layer}']
+    base_fraction_labels = [f'{SETTINGS.BASE_SEED_NUMERATOR * layer}/{layer}']
+    # base_value_labels = [SETTINGS.BASE_SEED_NUMERATOR]
     middle_points = []
     middle_fraction_labels = []
     middle_value_labels = []
     circle_arcs = []
     circle_lines = []
 
-    layer += SETTINGS.STEP_SIZE
+    layer += SETTINGS.BASE_SEED_DENOMINATOR
     for vector_index, vector in enumerate(VECTORS):
         base_points.append([vector.target.x, vector.target.y])
-        base_fraction_labels.append(f'{layer}/{layer}')
+        base_fraction_labels.append(f'{SETTINGS.BASE_SEED_NUMERATOR * layer}/{layer}')
+        # base_value_label = round(SETTINGS.BASE_SEED_NUMERATOR * layer / layer, SETTINGS.ROUNDING_PRECISION)
+        # base_value_label = int(base_value_label) if base_value_label.is_integer() else base_value_label
+        # base_value_labels.append(base_value_label)
+        # base_value_labels.append('')
         next_vector = VECTORS[(vector_index + 1) % len(VECTORS)]
         circle_arcs.append(vector - next_vector)
 
     for circle_index in range(1, SETTINGS.NUMBER_OF_CIRCLES):
         inner_layer = layer
-        layer += SETTINGS.STEP_SIZE
+        layer += SETTINGS.BASE_SEED_DENOMINATOR
 
         for vector in VECTORS:
             vector.length += SETTINGS.LENGTH_INCREMENT_PER_CIRCLE
             base_points.append([vector.target.x, vector.target.y])
-            base_fraction_labels.append(f'{layer}/{layer}')
+            base_fraction_labels.append(f'{SETTINGS.BASE_SEED_NUMERATOR * layer}/{layer}')
+            # base_value_label = round(SETTINGS.BASE_SEED_NUMERATOR * layer / layer, SETTINGS.ROUNDING_PRECISION)
+            # base_value_label = int(base_value_label) if base_value_label.is_integer() else base_value_label
+            # base_value_labels.append(base_value_label)
+            # base_value_labels.append('')
 
         for vector_index, vector in enumerate(VECTORS):
             next_vector = VECTORS[(vector_index + 1) % len(VECTORS)]
@@ -114,10 +123,14 @@ def main():
                 combination_vector.length += length
                 middle_points.append([combination_vector.target.x, combination_vector.target.y])
 
-                inner_layer_value += SETTINGS.STEP_SIZE
-                inner_layer_fraction_label = inner_layer_label_template.replace('[1]', str(inner_layer_value)).replace('[2]', str(inner_layer))
-                inner_layer_value_label = inner_layer_value / inner_layer if odd_step else inner_layer / inner_layer_value
-                inner_layer_value_label = str(round(inner_layer_value_label, SETTINGS.ROUNDING_PRECISION))
+                inner_layer_value += SETTINGS.BASE_SEED_DENOMINATOR
+                if not odd_step:
+                    inner_layer_fraction_label = inner_layer_label_template.replace('[1]', str(SETTINGS.BASE_SEED_NUMERATOR*inner_layer_value)).replace('[2]', str(inner_layer))
+                else:
+                    inner_layer_fraction_label = inner_layer_label_template.replace('[1]', str(inner_layer_value)).replace('[2]', str(SETTINGS.BASE_SEED_NUMERATOR*inner_layer))
+                inner_layer_value_label = SETTINGS.BASE_SEED_NUMERATOR * (inner_layer / inner_layer_value if odd_step else inner_layer_value / inner_layer)
+                inner_layer_value_label = round(inner_layer_value_label, SETTINGS.ROUNDING_PRECISION)
+                inner_layer_value_label = int(inner_layer_value_label) if inner_layer_value_label.is_integer() else inner_layer_value_label
                 middle_fraction_labels.append(inner_layer_fraction_label)
                 middle_value_labels.append(inner_layer_value_label)
 
@@ -126,6 +139,7 @@ def main():
     plot_points(plotter=plt,
                 points=base_points,
                 fraction_labels=base_fraction_labels,
+                # value_labels=base_value_labels,
                 marker_color=SETTINGS.MAIN_COLOR,
                 label_color=SETTINGS.MAIN_COLOR,
                 font_size=SETTINGS.FONT_SIZE,

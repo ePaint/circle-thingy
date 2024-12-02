@@ -10,7 +10,8 @@ class Settings(BaseModel):
     FONT_SIZE: int = 10
     DOT_SIZE: int = 5
     ROUNDING_PRECISION: int = 4
-    STEP_SIZE: int = 1
+    BASE_SEED_NUMERATOR: int = 1
+    BASE_SEED_DENOMINATOR: int = 1
     NUMBER_OF_CIRCLES: int = 10
     LENGTH_INCREMENT_PER_CIRCLE: float = 1.0
     SHOW_PLOT: bool = True

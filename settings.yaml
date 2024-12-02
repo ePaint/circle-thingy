@@ -2,7 +2,7 @@
 MAIN_COLOR: '#3d85c6'
 
 # Secondary points color
-SECONDARY_COLOR: '#674ea7'
+SECONDARY_COLOR: '#e69138'
 
 # Connecting lines between the main points
 TERTIARY_COLOR: '#434343'
@@ -14,10 +14,10 @@ FONT_SIZE: 10
 DOT_SIZE: 2
 
 # Number of decimal places for the rounding
-ROUNDING_PRECISION: 2
+ROUNDING_PRECISION: 4
 
-# Step size for the blue values
-STEP_SIZE: 6
+# Base seed numerator value, this gets multiplied by all the ratios
+BASE_SEED_NUMERATOR: 4
 
 # Number of circles to draw
 NUMBER_OF_CIRCLES: 32

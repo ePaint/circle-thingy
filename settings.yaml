@@ -17,7 +17,7 @@ DOT_SIZE: 2
 ROUNDING_PRECISION: 4
 
 # Base seed numerator value, this gets multiplied by all the ratios
-BASE_SEED_NUMERATOR: 4
+BASE_SEED_NUMERATOR: 9
 
 # Number of circles to draw
 NUMBER_OF_CIRCLES: 32
